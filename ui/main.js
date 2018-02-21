@@ -11,12 +11,12 @@ button.onclick = function(){
           if(request.status === 200){
             counter = request.responseText;
             var span = document.getElementById('count');  
-            span.innerHtml = counter.toString();  
+            span.innerHTML = counter.toString();  
           }
       }  
         
     };
     
-    request.open('get','http://gylrghv.imad.hasura-app.io/counter', true);
+    request.open('GET','http://gylrghv.imad.hasura-app.io/counter', true);
     request.send(null);
 };
