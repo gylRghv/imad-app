@@ -24,7 +24,8 @@ button.onclick = function(){
     request.send(null);
 };
 
-var namelist = document.getElementById('name').value;
+var namelist = document.getElementById('name');
+var name = namelist.value;
 var submit = document.getElementById('submit_btn');
 
 submit.onclick  = function(){
@@ -49,7 +50,7 @@ submit.onclick  = function(){
     };
     
     //make a request
-    request.open('GET','http://gylrghv.imad.hasura-app.io/submit-name?name=' + namelist, true);
+    request.open('GET','http://gylrghv.imad.hasura-app.io/submit-name?name=' + name, true);
     request.send(null);
     
     var names = [];
