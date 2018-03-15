@@ -57,7 +57,7 @@ app.get('/test-db', function(req,res){
       if(err){
           res.status(500).send(err.toString());
       }else{
-          res.status(200).send(JSON.stringfy(result));
+          res.status(200).send(JSON.stringify(result));
       }  
     });
 });
