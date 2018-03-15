@@ -24,13 +24,12 @@ button.onclick = function(){
     request.send(null);
 };
 
-var namelist = document.getElementById('name');
-var name = namelist.value;
-
 var submit = document.getElementById('submit_btn');
 
 submit.onclick  = function(){
-    alert(name);
+    var nameInput = document.getElementById('name');
+    var name = nameInput.value;
+    //alert(name);
     //make a request to server
     var request  = new XMLHttpRequest();
     
