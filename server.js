@@ -83,11 +83,12 @@ app.get('/submit-name',function(req,res){       //url of type: /sumbit-name?name
     res.send(JSON.stringify(names));
 });
 
-var articles = [];
 
 app.get('/articles/:articleName', function(req,res){
-    var articleName = req.params.articleName;
-    pool.query("SELECT * FROM article WHERE title ='"+ articleName+"'", function(err,result){
+    
+    //to prevent sql query from sql injection we use $
+    //pool.query("SELECT * FROM article WHERE title ='"+ req.params.articleName +"'", function(err,result){
+    pool.query("SELECT * FROM article WHERE title =$1",[req.params.articleName], function(err,result){    
         if(err){
             res.status(500).send(err.toString());
         }else{
