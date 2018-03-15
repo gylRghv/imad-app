@@ -1,9 +1,51 @@
 var express = require('express');
 var morgan = require('morgan');
 var path = require('path');
+var pool = require('pg').Pool;
+
+var config = {
+    user: 'gylrghv',
+    database: 'gylrghv',
+    host: 'db.imad.hasura-app.io',
+    port: '',
+    password: process.env.DB_PASSWORD
+}
 
 var app = express();
 app.use(morgan('combined'));
+
+function createTemplate(data) {
+    var title = data.title;
+    var date = data.date;
+    var heading = data.heading;
+    var content = data.content;
+    
+    var htmlTemplate = `
+    <html>
+        <head>
+            <title>${title}</title>
+            <link href='/ui/style.css' rel='stylesheet' />
+        </head>
+        <body>
+            <div class='container'>
+                <div>
+                    <a href='/'>Home</a>
+                </div>
+                <hr>
+                <h3>${heading}</h3>
+                <hr>
+                <div>
+                    ${date}
+                </div>
+                <div>
+                    ${content}
+                </div>
+            </div>    
+        </body>
+    </html>    
+    `;
+    return htmlTemplate;
+}
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
@@ -27,7 +69,12 @@ app.get('/ui/madi.png', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'madi.png'));
 });
 
-
+var names = [];
+app.get('/submit-names/:name',function(req,res){
+    var name = req.params.name;
+    names.push('name');
+    res.send(JSON.stringify(names));
+});
 // Do not change port, otherwise your app won't run on IMAD servers
 // Use 8080 only for local development if you already have apache running on 80
 
