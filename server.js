@@ -17,7 +17,7 @@ app.use(morgan('combined'));
 
 function hash(input,salt){
     var hashedValue = crypto.pbkdf2Sync(input,salt,1000,512,'sha512');
-    return["pbkdf2","1000",hashedVlaue.toString('hex')].join('$');
+    return["pbkdf2","1000",hashedValue.toString('hex')].join('$');
 }
 
 app.get('/hash/:input', function(req,res){
