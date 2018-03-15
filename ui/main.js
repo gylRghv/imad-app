@@ -53,7 +53,5 @@ submit.onclick  = function(){
     //make a request
     request.open('GET','http://gylrghv.imad.hasura-app.io/submit-name?name=' + name, true);
     request.send(null);
-    
-    var names = [];
-   
+
 };
