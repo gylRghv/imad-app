@@ -17,32 +17,6 @@ var app = express();
 app.use(morgan('combined'));
 app.use(bodyParser.json());
 
-function hash(input,salt){
-    var hashedValue = crypto.pbkdf2Sync(input,salt,1000,512,'sha512');
-    return["pbkdf2","1000",salt,hashedValue.toString('hex')].join('$');
-}
-
-app.get('/hash/:input', function(req,res){
-    res.send(hash(req.params.input,'this is a random string'));
-});
-
-app.post('/create-user',function(req,res){
-    
-    var username = req.body.username;
-    var password = req.body.password;
-    
-    var salt = crypto.randomBytes(128).toString('hex');
-    var dbstring = hash(password,salt);
-    pool.query('INSERT INTO "user" (username,password) VALUES ($1,$2)',[username,dbstring],function(req,res){
-        if(err){
-            res.status(500).send(err.toString());
-        }else{
-            res.status(200).send("User created successfully:"+ username);
-        }        
-    });
-    
-});
-
 function createTemplate(data) {
     var title = data.title;
     var date = data.date;
@@ -90,6 +64,32 @@ app.get('/test-db', function(req,res){
           res.status(200).send(JSON.stringify(result));
       }  
     });
+});
+
+function hash(input,salt){
+    var hashedValue = crypto.pbkdf2Sync(input,salt,1000,512,'sha512');
+    return["pbkdf2","1000",salt,hashedValue.toString('hex')].join('$');
+}
+
+app.get('/hash/:input', function(req,res){
+    res.send(hash(req.params.input,'this is a random string'));
+});
+
+app.post('/create-user',function(req,res){
+    
+    var username = req.body.username;
+    var password = req.body.password;
+    
+    var salt = crypto.randomBytes(128).toString('hex');
+    var dbstring = hash(password,salt);
+    pool.query('INSERT INTO "user" (username,password) VALUES ($1,$2)',[username,dbstring],function(req,res){
+        if(err){
+            res.status(500).send(err.toString());
+        }else{
+            res.status(200).send("User created successfully:"+ username);
+        }        
+    });
+    
 });
 
 var counter = 0;
