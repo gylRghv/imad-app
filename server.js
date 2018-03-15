@@ -2,6 +2,7 @@ var express = require('express');
 var morgan = require('morgan');
 var path = require('path');
 var Pool = require('pg').Pool;
+var crypto = require('crypto');
 
 var config = {
     user: 'gylrghv',
@@ -14,6 +15,14 @@ var config = {
 var app = express();
 app.use(morgan('combined'));
 
+function hash(input,salt){
+    var hashedValue = crypto.pbkd2Sync(input,salt,1000,512,'sha512');
+    return["pbkd2","1000",hashedVlaue.toString('hex')].join('$');
+}
+
+app.get('/hash/:input', function(req,res){
+    res.send(hash(req.params.input,'this is a random string'));
+});
 function createTemplate(data) {
     var title = data.title;
     var date = data.date;
