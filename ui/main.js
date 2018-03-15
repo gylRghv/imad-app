@@ -24,7 +24,7 @@ button.onclick = function(){
     request.send(null);
 };
 
-var name = document.getElementById('name').value;
+var namelist = document.getElementById('name').value;
 var submit = document.getElementById('submit_btn');
 
 submit.onclick  = function(){
@@ -39,7 +39,7 @@ submit.onclick  = function(){
                 var names = request.responseText; //names is a string -> to an array (in this case)
                 names = JSON.parse(names);
                 var list = '';
-                for (var i=0; i<names.length;i++){
+                for (var i=0; i< names.length;i++){
                     list += '<li>'+names[i]+'</li>';
                 }
                 var ul = document.getElementById('namelist');
@@ -49,7 +49,7 @@ submit.onclick  = function(){
     };
     
     //make a request
-    request.open('GET','http://gylrghv.imad.hasura-app.io/submit-name?name=' + name, true);
+    request.open('GET','http://gylrghv.imad.hasura-app.io/submit-name?name=' + namelist, true);
     request.send(null);
     
     var names = [];
