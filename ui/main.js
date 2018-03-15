@@ -26,6 +26,7 @@ button.onclick = function(){
 
 var namelist = document.getElementById('name');
 var name = namelist.value;
+alert(name);
 var submit = document.getElementById('submit_btn');
 
 submit.onclick  = function(){
