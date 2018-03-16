@@ -139,8 +139,8 @@ app.get('/check-login',function(req,res){
 
 app.get('/logout',function(req,res){
     delete(req.session.auth);
-    window.location.replace("http://gylrghv.imad.hasura-app.io/");
-    res.send("Logged out");
+   
+    res.send("Logged out").redirect("http://gylrghv.imad.hasura-app.io/");
 });
 
 var counter = 0;
