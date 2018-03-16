@@ -4,6 +4,7 @@ var path = require('path');
 var Pool = require('pg').Pool;
 var crypto = require('crypto');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 
 var config = {
     user: 'gylrghv',
@@ -16,6 +17,10 @@ var config = {
 var app = express();
 app.use(morgan('combined'));
 app.use(bodyParser.json());
+app.use(session({
+    secret: 'some random string',
+    cookie: {maxAge : 1000*60*60*24*30}   
+}));
 
 function createTemplate(data) {
     var title = data.title;
@@ -58,11 +63,11 @@ var pool = new Pool(config);
 
 app.get('/test-db', function(req,res){
     pool.query('SELECT * FROM articles', function(err,result){
-      if(err){
-          res.status(500).send(err.toString());
-      }else{
-          res.status(200).send(JSON.stringify(result));
-      }  
+        if(err){
+            res.status(500).send(err.toString());
+        }else{
+            res.status(200).send(JSON.stringify(result));
+        }  
     });
 });
 
@@ -97,31 +102,43 @@ app.post('/login',function(req,res){
    var password = req.body.password;
    
    pool.query('SELECT * FROM "user" WHERE username = $1',[username],function(err,result){
-       if(err){
+        if(err){
            res.status(500).send(err.toString());
-       }else{
-           if(result.rows.length === 0){
+        }else{
+            if(result.rows.length === 0){
                res.status(403).send("username/password is incorrect!");
-           }else{
-               //match the password
-               var dbstring = result.rows[0].password;
-               var salt = dbstring.split('$')[2];
-               var hashedPass = hash(password,salt);
-               if(hashedPass === dbstring){
-                   res.status(200).send("login successful!");
-               }else{
-                   res.status(403).send("username/password is wrong!");
-               }
+            }else{
+                //match the password
+                var dbstring = result.rows[0].password;
+                var salt = dbstring.split('$')[2];
+                var hashedPass = hash(password,salt);
+                if(hashedPass === dbstring){
+                    
+                    req.session.auth = {userId : result.rows[0].id};
+                    res.status(200).send("login successful!");
+                
+                    
+                } else {
+                    res.status(403).send("username/password is wrong!");
+                }
                
-           }
-       }
-   });
+            }
+        }
+    });
     
 });
+app.get('/check-login',function(req,res){
+    if(req.seesion && req.session.auth && req.session.auth.userId){
+        res.send('You are logged in as: '+ req.session.auth.userId.toString());
+    }else{
+        res.send('You are not logged in');
+    }        
+});
+
 var counter = 0;
 app.get('/counter', function (req, res) {
-  counter += 1; 
-  res.send(counter.toString());
+    counter += 1; 
+    res.send(counter.toString());
 });
 
 var names = [];
