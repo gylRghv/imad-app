@@ -117,8 +117,8 @@ app.post('/login',function(req,res){
                 if(hashedPass === dbstring){
                     
                     req.session.auth = {userId : result.rows[0].id};
+                    
                     res.status(200).send("login successful!");
-                
                     
                 } else {
                     res.status(403).send("username/password is wrong!");
@@ -130,7 +130,7 @@ app.post('/login',function(req,res){
     
 });
 app.get('/check-login',function(req,res){
-    if(req.seesion && req.session.auth && req.session.auth.userId){
+    if(req.session && req.session.auth && req.session.auth.userId){
         res.send('You are logged in as: '+ req.session.auth.userId.toString());
     }else{
         res.send('You are not logged in');
