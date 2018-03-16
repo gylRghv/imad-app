@@ -35,6 +35,7 @@ var logout = document.getElementById('logout');
 logout.onclick = function(){
     var request = new XMLHttpRequest();
     if(request.readyState === XMLHttpRequest.DONE){
+        alert("hi");
         if(request.status === 200){
         alert('logged out!');
         }
