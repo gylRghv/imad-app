@@ -30,6 +30,21 @@ submit.onclick  = function(){
 
 };
 
+var logout = document.getElementById('logout');
+
+logout.onclick = function(){
+    var request = new XMLHttpRequest();
+    if(request.readyState === XMLHttpRequest.DONE){
+            if(request.status === 200){
+            alert('logged out!');
+            }
+        }
+    };
+    
+    //make a request
+    request.open('GET','http://gylrghv.imad.hasura-app.io/logout', true);
+    request.send(null);
+};
 
 /*var button = document.getElementById('counter');
 var counter = 0;
